@@ -1,0 +1,25 @@
+# disallow all files without extensions
+*
+!*.*
+!*/
+
+# allow Makefiles
+!**Makefile**
+!processor/verilog
+
+# vscode and mac specific files
+.vscode/**
+.DS_Store**
+
+**build/**
+
+!**/*.*
+**/*.blif
+**/*.json
+**/*.asc
+**/*.bin
+**/*.hex
+**/*.o
+**/*.i
+**/*.sr
+**/*.map
