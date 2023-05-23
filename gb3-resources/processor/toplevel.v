@@ -1,4 +1,4 @@
-/*
+/**
 	Authored 2018-2019, Ryan Voo.
 
 	All rights reserved.
