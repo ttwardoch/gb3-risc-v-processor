@@ -58,7 +58,7 @@ module control(
 	input	[6:0] opcode;
 	output	MemtoReg, RegWrite, MemWrite, MemRead, Branch, ALUSrc, Jump, Jalr, Lui, Auipc, Fence, CSRR;
 
-	SB_LUT4     SB_LUT4_inst2 (
+	SB_LUT4     SB_LUT4_inst (
 			.O (O2),
 			.I0 (opcode[4]),
 			.I1 (opcode[5]),
@@ -66,7 +66,7 @@ module control(
 			.I3 (1)
 			);
 
-
+	defparam SB_LUT4_inst.LUT_INIT=16'hxxxx;
 
 
 	assign MemtoReg = (~opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[0]);
