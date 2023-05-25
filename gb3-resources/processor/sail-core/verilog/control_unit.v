@@ -66,7 +66,7 @@ module control(
 			.I3 (1)
 			);
 
-	defparam SB_LUT4_inst.LUT_INIT=16'hxxxx;
+	defparam SB_LUT4_inst.LUT_INIT=16'h0000;
 
 	assign MemtoReg = (~opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[0]);
 	assign RegWrite = ((~(opcode[4] | opcode[5])) | opcode[2] | opcode[4]) & opcode[0];
