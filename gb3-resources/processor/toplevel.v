@@ -67,11 +67,7 @@ module top (led);
 	 *	Shut down low oscillator
 	 */
 
-	SB_LFOSC OSCInst1 (
-      .CLKLFEN(ENCLKLF),
-      .CLKLFPU(CLKLF_POWERUP),
-      .CLKLF(clk)
-	);
+
 
 
 
