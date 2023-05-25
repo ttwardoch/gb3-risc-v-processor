@@ -399,13 +399,14 @@ module cpu(
 			.data_out(mem_wb_out)
 		);
 	*/
+	wire[10:0] trash;
 	
 	SB_MAC16 i_sbmac16_1 ( // port interfaces
 		.A(/*mem_regwb_mux_out[31:16]*/),
 		.B(/*mem_regwb_mux_out[15:0]*/),
 		.C({ex_mem_out[154:139]}),
-		.D({ex_mem_out[138], data_mem_out[31:17]}),
-		.O(mem_wb_out[116:85]),
+		.D({ex_mem_out[138], ex_mem_out[105:91]}), // last 11 unsused
+		.O({mem_wb_out[116:100], mem_wb_out[35:32], trash[10:0]}), // last 11 unused
 		.CLK(clk),
 		.CE(zero),
 		.IRSTTOP(zero),
@@ -436,12 +437,13 @@ module cpu(
 	defparam i_sbmac16_1.C_REG = 1'b1;
 	defparam i_sbmac16_1.D_REG = 1'b1;
 	
+	
 	SB_MAC16 i_sbmac16_2 ( // port interfaces
 		.A(/*mem_regwb_mux_out[31:16]*/),
 		.B(/*mem_regwb_mux_out[15:0]*/),
-		.C({data_mem_out[16:1]}),
-		.D({data_mem_out[0], mem_csrr_mux_out[31:17]}),
-		.O(mem_wb_out[84:53]),
+		.C({ex_mem_out[101:86]}),
+		.D({ex_mem_out[85:74], ex_mem_out[3:0]}),
+		.O(mem_wb_out[31:0]),
 		.CLK(clk),
 		.CE(zero),
 		.IRSTTOP(zero),
@@ -472,12 +474,13 @@ module cpu(
 	defparam i_sbmac16_2.C_REG = 1'b1;
 	defparam i_sbmac16_2.D_REG = 1'b1;
 	
+	// Later unused by yosys as outputs no longer used due to change in wb_mux
 	SB_MAC16 i_sbmac16_3 ( // port interfaces
 		.A(/*mem_regwb_mux_out[31:16]*/),
 		.B(/*mem_regwb_mux_out[15:0]*/),
-		.C({mem_csrr_mux_out[16:1]}),
-		.D({mem_csrr_mux_out[0], ex_mem_out[105:91]}),
-		.O(mem_wb_out[52:21]),
+		.C({data_mem_out[31:16]}),
+		.D({data_mem_out[15:0]}),
+		.O(mem_wb_out[99:68]),
 		.CLK(clk),
 		.CE(zero),
 		.IRSTTOP(zero),
@@ -508,14 +511,13 @@ module cpu(
 	defparam i_sbmac16_3.C_REG = 1'b1;
 	defparam i_sbmac16_3.D_REG = 1'b1;
 	
-	wire[10:0] trash;
-	
+	// Later unused by yosys as outputs no longer used due to change in wb_mux
 	SB_MAC16 i_sbmac16_4 ( // port interfaces
 		.A(/*mem_regwb_mux_out[31:16]*/),
 		.B(/*mem_regwb_mux_out[15:0]*/),
-		.C({ex_mem_out[90:75]}),
-		.D({ex_mem_out[74], ex_mem_out[3:0], ex_mem_out[90:80]}),
-		.O({mem_wb_out[20:0], trash[10:0]}),
+		.C({mem_csrr_mux_out[31:16]}),
+		.D({mem_csrr_mux_out[15:0]}),
+		.O({mem_wb_out[67:36]}),
 		.CLK(clk),
 		.CE(zero),
 		.IRSTTOP(zero),
@@ -548,6 +550,7 @@ module cpu(
 	
 	
 	//Writeback to Register Stage
+	// No longer needed, used a register keeping result from mem_regwb_mux_out instead as it does the same thing, but 1 clock cycle earlier.
 	/*
 	mux2to1 wb_mux(
 			.input0(mem_wb_out[67:36]),
@@ -682,8 +685,7 @@ module cpu(
 			.out(pc_mux0)
 		);
 
-	wire[31:0] mem_regwb_mux_out; //TODO copy of wb_mux but in mem stage, move back and cleanup
-	//A copy of the writeback mux, but in MEM stage //TODO move back and cleanup
+	wire[31:0] mem_regwb_mux_out;
 	mux2to1 mem_regwb_mux(
 			.input0(mem_csrr_mux_out),
 			.input1(data_mem_out),
