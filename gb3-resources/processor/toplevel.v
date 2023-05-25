@@ -49,6 +49,7 @@ module top (led);
 	
 	wire		clk;
 	reg		ENCLKHF		= 1'b1;	// Plock enable
+	reg		ENCLKLF		= 1'b1;	// Plock enable
 	reg		CLKHF_POWERUP	= 1'b1;	// Power up the HFOSC circuit
 	reg		CLKLF_POWERUP	= 1'b0;	// Power off the LFOSC circuit
 
