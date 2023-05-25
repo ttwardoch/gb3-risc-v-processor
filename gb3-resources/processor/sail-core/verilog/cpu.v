@@ -392,20 +392,209 @@ module cpu(
 		);
 
 	//MEM/WB Pipeline Register
+	/*
 	mem_wb mem_wb_reg(
 			.clk(clk),
 			.data_in({ex_mem_out[154:143], ex_mem_out[142:138], data_mem_out, mem_csrr_mux_out, ex_mem_out[105:74], ex_mem_out[3:0]}),
 			.data_out(mem_wb_out)
 		);
-
+	*/
+	
+	SB_MAC16 i_sbmac16_1 ( // port interfaces
+		.A(/*mem_regwb_mux_out[31:16]*/),
+		.B(/*mem_regwb_mux_out[15:0]*/),
+		.C({ex_mem_out[154:139]}),
+		.D({ex_mem_out[138], data_mem_out[31:17]}),
+		.O(mem_wb_out[116:85]),
+		.CLK(clk),
+		.CE(zero),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
+		.CO(),
+		.CI(zero),
+		.ACCUMCI(zero),
+		.ACCUMCO(),
+		.SIGNEXTIN(zero),
+		.SIGNEXTOUT()
+	);
+	
+	defparam i_sbmac16_1.TOPADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_1.TOPADDSUB_CARRYSELECT = 2'b10;
+	defparam i_sbmac16_1.BOTADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_1.C_REG = 1'b1;
+	defparam i_sbmac16_1.D_REG = 1'b1;
+	
+	SB_MAC16 i_sbmac16_2 ( // port interfaces
+		.A(/*mem_regwb_mux_out[31:16]*/),
+		.B(/*mem_regwb_mux_out[15:0]*/),
+		.C({data_mem_out[16:1]}),
+		.D({data_mem_out[0], mem_csrr_mux_out[31:17]}),
+		.O(mem_wb_out[84:53]),
+		.CLK(clk),
+		.CE(zero),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
+		.CO(),
+		.CI(zero),
+		.ACCUMCI(zero),
+		.ACCUMCO(),
+		.SIGNEXTIN(zero),
+		.SIGNEXTOUT()
+	);
+	
+	defparam i_sbmac16_2.TOPADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_2.TOPADDSUB_CARRYSELECT = 2'b10;
+	defparam i_sbmac16_2.BOTADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_2.C_REG = 1'b1;
+	defparam i_sbmac16_2.D_REG = 1'b1;
+	
+	SB_MAC16 i_sbmac16_3 ( // port interfaces
+		.A(/*mem_regwb_mux_out[31:16]*/),
+		.B(/*mem_regwb_mux_out[15:0]*/),
+		.C({mem_csrr_mux_out[16:1]}),
+		.D({mem_csrr_mux_out[0], ex_mem_out[105:91]}),
+		.O(mem_wb_out[52:21]),
+		.CLK(clk),
+		.CE(zero),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
+		.CO(),
+		.CI(zero),
+		.ACCUMCI(zero),
+		.ACCUMCO(),
+		.SIGNEXTIN(zero),
+		.SIGNEXTOUT()
+	);
+	
+	defparam i_sbmac16_3.TOPADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_3.TOPADDSUB_CARRYSELECT = 2'b10;
+	defparam i_sbmac16_3.BOTADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_3.C_REG = 1'b1;
+	defparam i_sbmac16_3.D_REG = 1'b1;
+	
+	wire[10:0] trash;
+	
+	SB_MAC16 i_sbmac16_4 ( // port interfaces
+		.A(/*mem_regwb_mux_out[31:16]*/),
+		.B(/*mem_regwb_mux_out[15:0]*/),
+		.C({ex_mem_out[90:75]}),
+		.D({ex_mem_out[74], ex_mem_out[3:0], ex_mem_out[90:80]}),
+		.O({mem_wb_out[20:0], trash[10:0]}),
+		.CLK(clk),
+		.CE(zero),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
+		.CO(),
+		.CI(zero),
+		.ACCUMCI(zero),
+		.ACCUMCO(),
+		.SIGNEXTIN(zero),
+		.SIGNEXTOUT()
+	);
+	
+	defparam i_sbmac16_4.TOPADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_4.TOPADDSUB_CARRYSELECT = 2'b10;
+	defparam i_sbmac16_4.BOTADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_4.C_REG = 1'b1;
+	defparam i_sbmac16_4.D_REG = 1'b1;
+	
+	
 	//Writeback to Register Stage
+	/*
 	mux2to1 wb_mux(
 			.input0(mem_wb_out[67:36]),
 			.input1(mem_wb_out[99:68]),
 			.select(mem_wb_out[1]),
 			.out(wb_mux_out)
 		);
-
+	*/
+	reg zero = 1'b0;
+	reg one = 1'b1;
+	
+	SB_MAC16 i_sbmac16_0 ( // port interfaces
+		.A(/*mem_regwb_mux_out[31:16]*/),
+		.B(/*mem_regwb_mux_out[15:0]*/),
+		.C(mem_regwb_mux_out[31:16]),
+		.D(mem_regwb_mux_out[15:0]),
+		.O(wb_mux_out),
+		.CLK(clk),
+		.CE(zero),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
+		.CO(),
+		.CI(zero),
+		.ACCUMCI(zero),
+		.ACCUMCO(),
+		.SIGNEXTIN(zero),
+		.SIGNEXTOUT()
+	);
+	
+	defparam i_sbmac16_0.TOPADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_0.TOPADDSUB_CARRYSELECT = 2'b10;
+	defparam i_sbmac16_0.BOTADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16_0.C_REG = 1'b1;
+	defparam i_sbmac16_0.D_REG = 1'b1;
+	
 	mux2to1 reg_dat_mux( //TODO cleanup
 			.input0(mem_regwb_mux_out),
 			.input1(id_ex_out[43:12]),
