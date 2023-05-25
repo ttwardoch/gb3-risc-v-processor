@@ -62,7 +62,11 @@ module program_counter(inAddr, outAddr, clk);
 		outAddr = 32'b0;
 	end
 
-	always @(posedge clk) begin
-		outAddr <= inAddr;
-	end
+
+
+	SB_DFF SB_DFF_inst(
+		.Q(outAddr),
+		.C(clk),
+		.D(inAddr),
+	);
 endmodule

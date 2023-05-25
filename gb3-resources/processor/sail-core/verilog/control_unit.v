@@ -58,16 +58,26 @@ module control(
 	input	[6:0] opcode;
 	output	MemtoReg, RegWrite, MemWrite, MemRead, Branch, ALUSrc, Jump, Jalr, Lui, Auipc, Fence, CSRR;
 
+	SB_LUT4     SB_LUT4_inst2 (
+			.O (O2),
+			.I0 (opcode[4]),
+			.I1 (opcode[5]),
+			.I2 (opcode[6]),
+			.I3 (1)
+			);
+
+	defparam SB_LUT4_inst.LUT_INIT2=16'hxxxx;
+
 	assign MemtoReg = (~opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[0]);
 	assign RegWrite = ((~(opcode[4] | opcode[5])) | opcode[2] | opcode[4]) & opcode[0];
-	assign MemWrite = (~opcode[6]) & (opcode[5]) & (~opcode[4]);
+	assign MemWrite = LUT_INIT2[2] | LUT_INIT2[10];
 	assign MemRead = (~opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[1]);
 	assign Branch = (opcode[6]) & (~opcode[4]) & (~opcode[2]);
 	assign ALUSrc = ~(opcode[6] | opcode[4]) | (~opcode[5]);
-	assign Jump = (opcode[6]) & (opcode[5]) & (~opcode[4]) & (opcode[2]);
-	assign Jalr = (opcode[6]) & (opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[2]);
-	assign Lui = (~opcode[6]) & (opcode[5]) & (opcode[4]) & (~opcode[3]) & (opcode[2]);
-	assign Auipc = (~opcode[6]) & (~opcode[5]) & (opcode[4]) & (~opcode[3]) & (opcode[2]);
+	assign Jump = LUT_INIT2[14] & (opcode[2]);
+	assign Jalr = LUT_INIT2[14] & (~opcode[3]) & (opcode[2]);
+	assign Lui = LUT_INIT2[11] & (~opcode[3]) & (opcode[2]);
+	assign Auipc = LUT_INIT2[9] & (~opcode[3]) & (opcode[2]);
 	assign Fence = (~opcode[5]) & opcode[3] & (opcode[2]);
-	assign CSRR = (opcode[6]) & (opcode[4]);
+	assign CSRR = LUT_INIT2[5] | LUT_INIT2[7] | LUT_INIT2[13] | LUT_INIT2[15];
 endmodule

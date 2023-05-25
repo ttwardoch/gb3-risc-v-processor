@@ -142,7 +142,11 @@ module mem_wb (clk, data_in, data_out);
 		data_out = 117'b0;
 	end
 
-	always @(posedge clk) begin
-		data_out <= data_in;
-	end
+
+
+	SB_DFF SB_DFF_inst (
+      .Q(data_out),      // Registered Output
+      .C(clk),      // Clock
+      .D(data_in),      // Data
+      );
 endmodule
