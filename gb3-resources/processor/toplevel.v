@@ -83,9 +83,9 @@ module top (led);
 	wire		data_memread;
 	wire[3:0]	data_sign_mask;
 
-	reg		POWEROFF	= 1'b0;	// Power off all the SPRAM blocks
+	//reg		POWEROFF	= 1'b0;	// Power off all the SPRAM blocks
 
-	SB_SPRAM256KA  ramfn_inst1(
+	/*SB_SPRAM256KA  ramfn_inst1(
                 .DATAIN(DATAIN),
                 .ADDRESS(ADDRESS),
                 .MASKWREN(MASKWREN),
@@ -96,9 +96,9 @@ module top (led);
                 .SLEEP(SLEEP),
                 .POWEROFF(POWEROFF),
                 .DATAOUT(DATAOUT_A)
-	);
+	);*/
 
-	SB_SPRAM256KA  ramfn_inst2(
+	/*SB_SPRAM256KA  ramfn_inst2(
                 .DATAIN(DATAIN),
                 .ADDRESS(ADDRESS),
                 .MASKWREN(MASKWREN),
@@ -109,9 +109,9 @@ module top (led);
                 .SLEEP(SLEEP),
                 .POWEROFF(POWEROFF),
                 .DATAOUT(DATAOUT_A)
-	);
+	);*/
 
-	SB_SPRAM256KA  ramfn_inst3(
+	/*SB_SPRAM256KA  ramfn_inst3(
                 .DATAIN(DATAIN),
                 .ADDRESS(ADDRESS),
                 .MASKWREN(MASKWREN),
@@ -122,9 +122,9 @@ module top (led);
                 .SLEEP(SLEEP),
                 .POWEROFF(POWEROFF),
                 .DATAOUT(DATAOUT_A)
-	);
+	);*/
 
-	SB_SPRAM256KA  ramfn_inst4(
+	/*SB_SPRAM256KA  ramfn_inst4(
                 .DATAIN(DATAIN),
                 .ADDRESS(ADDRESS),
                 .MASKWREN(MASKWREN),
@@ -135,7 +135,7 @@ module top (led);
                 .SLEEP(SLEEP),
                 .POWEROFF(POWEROFF),
                 .DATAOUT(DATAOUT_A)
-	);
+	);*/
 
 	cpu processor(
 		.clk(clk_proc),
