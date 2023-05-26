@@ -42,7 +42,7 @@
 
 
 
-module instruction_memory(addr, out, clk);
+module instruction_memory(addr, out);
 	input [31:0]		addr;
 	output [31:0]		out;
 
