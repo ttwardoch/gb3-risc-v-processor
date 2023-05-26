@@ -43,7 +43,6 @@
 
 
 module instruction_memory(addr, out, clk);
-	input 				clk;
 	input [31:0]		addr;
 	output [31:0]		out;
 
@@ -75,7 +74,7 @@ module instruction_memory(addr, out, clk);
 		$readmemh("program.hex",instruction_memory);
 	end
 
-	always @(posedge clk) begin
-		out <= instruction_memory[addr >> 2];
-	end
+	
+	assign out <= instruction_memory[addr >> 2];
+	
 endmodule
