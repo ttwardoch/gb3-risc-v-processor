@@ -40,6 +40,7 @@
  *	RISC-V CONTROL UNIT
  */
 module control(
+		clk,
 		opcode,
 		MemtoReg,
 		RegWrite,
