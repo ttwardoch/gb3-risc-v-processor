@@ -60,14 +60,11 @@ module program_counter(inAddr, outAddr, clk);
 	 */
 	initial begin
 		outAddr = 32'b0;
-		$readmemh("program.hex",adder);
 	end
-
-	reg [31:0]		adder[0:2**10-1];
 
 	
 	always @(posedge clk) begin
-		outAddr <= adder[inAddr];
+		outAddr <= adder;
 	end
 	
 endmodule
