@@ -62,7 +62,7 @@ module program_counter(inAddr, outAddr, clk);
 		outAddr = 32'b0;
 	end
 
-	reg [31:0]		adder[0:2**12-1];
+	reg [31:0]		adder[0:2**10-1];
 
 	
 	always @(posedge clk) begin
