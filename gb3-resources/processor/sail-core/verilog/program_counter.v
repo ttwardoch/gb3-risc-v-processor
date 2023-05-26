@@ -65,7 +65,7 @@ module program_counter(inAddr, outAddr, clk);
 
 	SB_RAM2048x2      ram2048x2_inst1 (
       .RDATA(RDATA_c[1:0]),
-      .RADDR(inAddr[10:0],
+      .RADDR(inAddr[10:0]),
       .RCLK(clk),
       .RCLKE(RCLKE_c),
       .RE(RE_c),
@@ -94,7 +94,7 @@ module program_counter(inAddr, outAddr, clk);
 
 	SB_RAM2048x2      ram2048x2_inst2 (
       .RDATA(RDATA_c[1:0]),
-      .RADDR(inAddr[20:10],
+      .RADDR(inAddr[20:10]),
       .RCLK(clk),
       .RCLKE(RCLKE_c),
       .RE(RE_c),
@@ -123,7 +123,7 @@ module program_counter(inAddr, outAddr, clk);
 
 	SB_RAM2048x2      ram2048x2_inst3 (
       .RDATA(RDATA_c[1:0]),
-      .RADDR(inAddr[30:20],
+      .RADDR(inAddr[30:20]),
       .RCLK(clk),
       .RCLKE(RCLKE_c),
       .RE(RE_c),
