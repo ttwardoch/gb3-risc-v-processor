@@ -64,9 +64,7 @@ module program_counter(inAddr, outAddr, clk);
 
 
 
-	SB_DFF SB_DFF_inst(
-		.Q(outAddr),
-		.C(clk),
-		.D(inAddr),
-	);
+	always @(posedge clk) begin
+		outAddr <= inAddr;
+	end
 endmodule
