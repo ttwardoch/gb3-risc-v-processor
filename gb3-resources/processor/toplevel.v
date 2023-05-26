@@ -83,60 +83,6 @@ module top (led);
 	wire		data_memread;
 	wire[3:0]	data_sign_mask;
 
-	//reg		POWEROFF	= 1'b0;	// Power off all the SPRAM blocks
-
-	/*SB_SPRAM256KA  ramfn_inst1(
-                .DATAIN(DATAIN),
-                .ADDRESS(ADDRESS),
-                .MASKWREN(MASKWREN),
-                .WREN(WREN),
-				.CHIPSELECT(CHIPSELECT),
-                .CLOCK(CLOCK),
-                .STANDBY(STANDBY),
-                .SLEEP(SLEEP),
-                .POWEROFF(POWEROFF),
-                .DATAOUT(DATAOUT_A)
-	);*/
-
-	/*SB_SPRAM256KA  ramfn_inst2(
-                .DATAIN(DATAIN),
-                .ADDRESS(ADDRESS),
-                .MASKWREN(MASKWREN),
-                .WREN(WREN),
-				.CHIPSELECT(CHIPSELECT),
-                .CLOCK(CLOCK),
-                .STANDBY(STANDBY),
-                .SLEEP(SLEEP),
-                .POWEROFF(POWEROFF),
-                .DATAOUT(DATAOUT_A)
-	);*/
-
-	/*SB_SPRAM256KA  ramfn_inst3(
-                .DATAIN(DATAIN),
-                .ADDRESS(ADDRESS),
-                .MASKWREN(MASKWREN),
-                .WREN(WREN),
-				.CHIPSELECT(CHIPSELECT),
-                .CLOCK(CLOCK),
-                .STANDBY(STANDBY),
-                .SLEEP(SLEEP),
-                .POWEROFF(POWEROFF),
-                .DATAOUT(DATAOUT_A)
-	);*/
-
-	/*SB_SPRAM256KA  ramfn_inst4(
-                .DATAIN(DATAIN),
-                .ADDRESS(ADDRESS),
-                .MASKWREN(MASKWREN),
-                .WREN(WREN),
-				.CHIPSELECT(CHIPSELECT),
-                .CLOCK(CLOCK),
-                .STANDBY(STANDBY),
-                .SLEEP(SLEEP),
-                .POWEROFF(POWEROFF),
-                .DATAOUT(DATAOUT_A)
-	);*/
-
 	cpu processor(
 		.clk(clk_proc),
 		.inst_mem_in(inst_in),
@@ -152,6 +98,7 @@ module top (led);
 	instruction_memory inst_mem( 
 		.addr(inst_in), 
 		.out(inst_out)
+		.clk(clk)
 	);
 
 	data_mem data_mem_inst(
