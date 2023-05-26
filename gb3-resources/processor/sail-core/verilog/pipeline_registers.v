@@ -61,11 +61,9 @@ module if_id (clk, data_in, data_out);
 		data_out = 64'b0;
 	end
 	
-	SB_DFF SB_DFF_inst (
-      .Q(data_out),      // Registered Output
-      .C(clk),      // Clock
-      .D(data_in),      // Data
-      );
+	always @(posedge clk) begin
+		data_out <= data_in;
+	end
 endmodule
 
 
@@ -90,11 +88,9 @@ module id_ex (clk, data_in, data_out);
 		data_out = 178'b0;
 	end
 
-	SB_DFF SB_DFF_inst (
-      .Q(data_out),      // Registered Output
-      .C(clk),      // Clock
-      .D(data_in),      // Data
-      );
+	always @(posedge clk) begin
+		data_out <= data_in;
+	end
 endmodule
 
 
@@ -119,11 +115,9 @@ module ex_mem (clk, data_in, data_out);
 		data_out = 155'b0;
 	end
 
-	SB_DFF SB_DFF_inst (
-      .Q(data_out),      // Registered Output
-      .C(clk),      // Clock
-      .D(data_in),      // Data
-      );
+	always @(posedge clk) begin
+		data_out <= data_in;
+	end
 endmodule
 
 
@@ -150,9 +144,7 @@ module mem_wb (clk, data_in, data_out);
 
 
 
-	SB_DFF SB_DFF_inst (
-      .Q(data_out),      // Registered Output
-      .C(clk),      // Clock
-      .D(data_in),      // Data
-      );
+	always @(posedge clk) begin
+		data_out <= data_in;
+	end
 endmodule
