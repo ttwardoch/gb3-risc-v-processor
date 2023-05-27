@@ -69,9 +69,9 @@ endmodule
 module id_ex (clk, data_in, data_out);
 	input			clk;
 	input [177:0]	data_in;
-	reg [113:0]	temporary;
-	output [177:0]	data_out;
-	
+	//reg [113:0]	temporary;
+	output reg [177:0]	data_out;
+	/*
 	dsp_register dsp_register_id_ex_1 (
 			.clk(clk),
 			.inData(data_in[177:146]),
@@ -83,7 +83,7 @@ module id_ex (clk, data_in, data_out);
 			.inData(data_in[145:114]),
 			.outData(data_out[145:114])
 		);
-
+	*/
 	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
 	 *	initial values:
@@ -94,6 +94,7 @@ module id_ex (clk, data_in, data_out);
 	 *	the design should instead use a reset signal going to
 	 *	modules in the design and to thereby set the values.
 	 */
+	 /*
 	initial begin
 		temporary = 114'b0;
 	end
@@ -103,6 +104,14 @@ module id_ex (clk, data_in, data_out);
 	end
 	
 	assign data_out[113:0] = temporary;
+	*/
+	initial begin
+		data_out <= 178'b0;
+	end
+
+	always @(posedge clk) begin
+		data_out <= data_in;
+	end
 endmodule
 
 
@@ -111,7 +120,20 @@ endmodule
 module ex_mem (clk, data_in, data_out);
 	input			clk;
 	input [154:0]		data_in;
-	output reg[154:0]	data_out;
+	reg [90:0] temporary;
+	output [154:0]	data_out;
+	
+	dsp_register dsp_register_ex_mem_1 (
+			.clk(clk),
+			.inData(data_in[154:123]),
+			.outData(data_out[154:123])
+		);
+		
+	dsp_register dsp_register_ex_mem_2 (
+			.clk(clk),
+			.inData(data_in[122:91]),
+			.outData(data_out[122:91])
+		);
 	
 	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
@@ -124,12 +146,14 @@ module ex_mem (clk, data_in, data_out);
 	 *	modules in the design and to thereby set the values.
 	 */
 	initial begin
-		data_out <= 155'b0;
+		temporary = 91'b0;
 	end
 
 	always @(posedge clk) begin
-		data_out <= data_in;
+		temporary <= data_in[90:0];
 	end
+	
+	assign data_out[90:0] = temporary;
 endmodule
 
 
