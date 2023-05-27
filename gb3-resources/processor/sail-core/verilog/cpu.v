@@ -400,34 +400,36 @@ module cpu(
 		);
 	*/
 	wire[10:0] trash;
+	reg zero = 1'b0;
+	reg one = 1'b1;
 
 	SB_MAC16 i_sbmac16_1 ( // port interfaces
-		.A(/*mem_regwb_mux_out[31:16]*/),
-		.B(/*mem_regwb_mux_out[15:0]*/),
+		.A({ex_mem_out[154:139]}),
+		.B({ex_mem_out[138], ex_mem_out[105:91]}),
 		.C({ex_mem_out[154:139]}),
 		.D({ex_mem_out[138], ex_mem_out[105:91]}), // last 11 unsused
 		.O({mem_wb_out[116:100], mem_wb_out[35:32], trash[10:0]}), // last 11 unused
 		.CLK(clk),
-		.CE(0),
-		.IRSTTOP(0),
-		.IRSTBOT(0),
-		.ORSTTOP(0),
-		.ORSTBOT(0),
-		.AHOLD(1),
-		.BHOLD(1),
-		.CHOLD(0),
-		.DHOLD(0),
-		.OHOLDTOP(0),
-		.OHOLDBOT(0),
-		.OLOADTOP(1),
-		.OLOADBOT(1),
-		.ADDSUBTOP(0),
-		.ADDSUBBOT(0),
+		.CE(one),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
 		.CO(),
-		.CI(0),
-		.ACCUMCI(0),
+		.CI(zero),
+		.ACCUMCI(zero),
 		.ACCUMCO(),
-		.SIGNEXTIN(0),
+		.SIGNEXTIN(zero),
 		.SIGNEXTOUT()
 	);
 	
@@ -436,6 +438,7 @@ module cpu(
 	defparam i_sbmac16_1.BOTADDSUB_UPPERINPUT = 1'b1;
 	defparam i_sbmac16_1.C_REG = 1'b1;
 	defparam i_sbmac16_1.D_REG = 1'b1;
+	defparam i_sbmac16_1.MODE_8x8 = 1'b1;
 	
 	
 	SB_MAC16 i_sbmac16_2 ( // port interfaces
@@ -445,26 +448,26 @@ module cpu(
 		.D({ex_mem_out[85:74], ex_mem_out[3:0]}),
 		.O(mem_wb_out[31:0]),
 		.CLK(clk),
-		.CE(0),
-		.IRSTTOP(0),
-		.IRSTBOT(0),
-		.ORSTTOP(0),
-		.ORSTBOT(0),
-		.AHOLD(1),
-		.BHOLD(1),
-		.CHOLD(0),
-		.DHOLD(0),
-		.OHOLDTOP(0),
-		.OHOLDBOT(0),
-		.OLOADTOP(1),
-		.OLOADBOT(1),
-		.ADDSUBTOP(0),
-		.ADDSUBBOT(0),
+		.CE(one),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
 		.CO(),
-		.CI(0),
-		.ACCUMCI(0),
+		.CI(zero),
+		.ACCUMCI(zero),
 		.ACCUMCO(),
-		.SIGNEXTIN(0),
+		.SIGNEXTIN(zero),
 		.SIGNEXTOUT()
 	);
 	
@@ -473,6 +476,7 @@ module cpu(
 	defparam i_sbmac16_2.BOTADDSUB_UPPERINPUT = 1'b1;
 	defparam i_sbmac16_2.C_REG = 1'b1;
 	defparam i_sbmac16_2.D_REG = 1'b1;
+	defparam i_sbmac16_2.MODE_8x8 = 1'b1;
 	
 	// Later unused by yosys as outputs no longer used due to change in wb_mux
 	SB_MAC16 i_sbmac16_3 ( // port interfaces
@@ -482,26 +486,26 @@ module cpu(
 		.D({data_mem_out[15:0]}),
 		.O(mem_wb_out[99:68]),
 		.CLK(clk),
-		.CE(0),
-		.IRSTTOP(0),
-		.IRSTBOT(0),
-		.ORSTTOP(0),
-		.ORSTBOT(0),
-		.AHOLD(1),
-		.BHOLD(1),
-		.CHOLD(0),
-		.DHOLD(0),
-		.OHOLDTOP(0),
-		.OHOLDBOT(0),
-		.OLOADTOP(1),
-		.OLOADBOT(1),
-		.ADDSUBTOP(0),
-		.ADDSUBBOT(0),
+		.CE(one),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
 		.CO(),
-		.CI(0),
-		.ACCUMCI(0),
+		.CI(zero),
+		.ACCUMCI(zero),
 		.ACCUMCO(),
-		.SIGNEXTIN(0),
+		.SIGNEXTIN(zero),
 		.SIGNEXTOUT()
 	);
 	
@@ -510,6 +514,7 @@ module cpu(
 	defparam i_sbmac16_3.BOTADDSUB_UPPERINPUT = 1'b1;
 	defparam i_sbmac16_3.C_REG = 1'b1;
 	defparam i_sbmac16_3.D_REG = 1'b1;
+	defparam i_sbmac16_3.MODE_8x8 = 1'b1;
 	
 	// Later unused by yosys as outputs no longer used due to change in wb_mux
 	SB_MAC16 i_sbmac16_4 ( // port interfaces
@@ -519,26 +524,26 @@ module cpu(
 		.D({mem_csrr_mux_out[15:0]}),
 		.O({mem_wb_out[67:36]}),
 		.CLK(clk),
-		.CE(0),
-		.IRSTTOP(0),
-		.IRSTBOT(0),
-		.ORSTTOP(0),
-		.ORSTBOT(0),
-		.AHOLD(1),
-		.BHOLD(1),
-		.CHOLD(0),
-		.DHOLD(0),
-		.OHOLDTOP(0),
-		.OHOLDBOT(0),
-		.OLOADTOP(1),
-		.OLOADBOT(1),
-		.ADDSUBTOP(0),
-		.ADDSUBBOT(0),
+		.CE(one),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
 		.CO(),
-		.CI(0),
-		.ACCUMCI(0),
+		.CI(zero),
+		.ACCUMCI(zero),
 		.ACCUMCO(),
-		.SIGNEXTIN(0),
+		.SIGNEXTIN(zero),
 		.SIGNEXTOUT()
 	);
 	
@@ -547,6 +552,7 @@ module cpu(
 	defparam i_sbmac16_4.BOTADDSUB_UPPERINPUT = 1'b1;
 	defparam i_sbmac16_4.C_REG = 1'b1;
 	defparam i_sbmac16_4.D_REG = 1'b1;
+	defparam i_sbmac16_4.MODE_8x8 = 1'b1;
 	
 	
 	//Writeback to Register Stage
@@ -567,26 +573,26 @@ module cpu(
 		.D(mem_regwb_mux_out[15:0]),
 		.O(wb_mux_out),
 		.CLK(clk),
-		.CE(0),
-		.IRSTTOP(0),
-		.IRSTBOT(0),
-		.ORSTTOP(0),
-		.ORSTBOT(0),
-		.AHOLD(1),
-		.BHOLD(1),
-		.CHOLD(0),
-		.DHOLD(0),
-		.OHOLDTOP(0),
-		.OHOLDBOT(0),
-		.OLOADTOP(1),
-		.OLOADBOT(1),
-		.ADDSUBTOP(0),
-		.ADDSUBBOT(0),
+		.CE(one),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(one),
+		.BHOLD(one),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(one),
+		.OLOADBOT(one),
+		.ADDSUBTOP(zero),
+		.ADDSUBBOT(zero),
 		.CO(),
-		.CI(0),
-		.ACCUMCI(0),
+		.CI(zero),
+		.ACCUMCI(zero),
 		.ACCUMCO(),
-		.SIGNEXTIN(0),
+		.SIGNEXTIN(zero),
 		.SIGNEXTOUT()
 	);
 	
@@ -595,6 +601,7 @@ module cpu(
 	defparam i_sbmac16_0.BOTADDSUB_UPPERINPUT = 1'b1;
 	defparam i_sbmac16_0.C_REG = 1'b1;
 	defparam i_sbmac16_0.D_REG = 1'b1;
+	defparam i_sbmac16_0.MODE_8x8 = 1'b1;
 	
 	mux2to1 reg_dat_mux( //TODO cleanup
 			.input0(mem_regwb_mux_out),
