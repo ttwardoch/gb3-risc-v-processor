@@ -61,7 +61,7 @@ module adder(input1, input2, out);
 		.D(input2[15:0]),
 		.O(out),
 		.CLK(zero),
-		.CE(one),
+		.CE(zero),
 		.IRSTTOP(zero),
 		.IRSTBOT(zero),
 		.ORSTTOP(zero),
@@ -88,8 +88,8 @@ module adder(input1, input2, out);
 	defparam i_sbmac16.TOPADDSUB_UPPERINPUT = 1'b1;
 	defparam i_sbmac16.TOPADDSUB_CARRYSELECT = 2'b10;
 	defparam i_sbmac16.BOTADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16.A_SIGNED = 1'b1;
-	defparam i_sbmac16.B_SIGNED = 1'b1;
+	//defparam i_sbmac16.A_SIGNED = 1'b1;
+	//defparam i_sbmac16.B_SIGNED = 1'b1;
 	defparam i_sbmac16.MODE_8x8 = 1'b1;
 	
 	//assign		out = input1 + input2;

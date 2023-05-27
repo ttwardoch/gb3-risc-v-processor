@@ -400,160 +400,32 @@ module cpu(
 		);
 	*/
 	wire[10:0] trash;
-	reg zero = 1'b0;
-	reg one = 1'b1;
-
-	SB_MAC16 i_sbmac16_1 ( // port interfaces
-		.A({ex_mem_out[154:139]}),
-		.B({ex_mem_out[138], ex_mem_out[105:91]}),
-		.C({ex_mem_out[154:139]}),
-		.D({ex_mem_out[138], ex_mem_out[105:91]}), // last 11 unsused
-		.O({mem_wb_out[116:100], mem_wb_out[35:32], trash[10:0]}), // last 11 unused
-		.CLK(clk),
-		.CE(one),
-		.IRSTTOP(zero),
-		.IRSTBOT(zero),
-		.ORSTTOP(zero),
-		.ORSTBOT(zero),
-		.AHOLD(one),
-		.BHOLD(one),
-		.CHOLD(zero),
-		.DHOLD(zero),
-		.OHOLDTOP(zero),
-		.OHOLDBOT(zero),
-		.OLOADTOP(one),
-		.OLOADBOT(one),
-		.ADDSUBTOP(zero),
-		.ADDSUBBOT(zero),
-		.CO(),
-		.CI(zero),
-		.ACCUMCI(zero),
-		.ACCUMCO(),
-		.SIGNEXTIN(zero),
-		.SIGNEXTOUT()
-	);
 	
-	defparam i_sbmac16_1.TOPADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_1.TOPADDSUB_CARRYSELECT = 2'b10;
-	defparam i_sbmac16_1.BOTADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_1.C_REG = 1'b1;
-	defparam i_sbmac16_1.D_REG = 1'b1;
-	defparam i_sbmac16_1.MODE_8x8 = 1'b1;
+	dsp_register dsp_register_mem_wb_1 (
+			.clk(clk),
+			.inData({ex_mem_out[154:138], ex_mem_out[105:91]}),
+			.outData({mem_wb_out[116:100], mem_wb_out[35:32], trash[10:0]})
+		);
 	
-	
-	SB_MAC16 i_sbmac16_2 ( // port interfaces
-		.A(/*mem_regwb_mux_out[31:16]*/),
-		.B(/*mem_regwb_mux_out[15:0]*/),
-		.C({ex_mem_out[101:86]}),
-		.D({ex_mem_out[85:74], ex_mem_out[3:0]}),
-		.O(mem_wb_out[31:0]),
-		.CLK(clk),
-		.CE(one),
-		.IRSTTOP(zero),
-		.IRSTBOT(zero),
-		.ORSTTOP(zero),
-		.ORSTBOT(zero),
-		.AHOLD(one),
-		.BHOLD(one),
-		.CHOLD(zero),
-		.DHOLD(zero),
-		.OHOLDTOP(zero),
-		.OHOLDBOT(zero),
-		.OLOADTOP(one),
-		.OLOADBOT(one),
-		.ADDSUBTOP(zero),
-		.ADDSUBBOT(zero),
-		.CO(),
-		.CI(zero),
-		.ACCUMCI(zero),
-		.ACCUMCO(),
-		.SIGNEXTIN(zero),
-		.SIGNEXTOUT()
-	);
-	
-	defparam i_sbmac16_2.TOPADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_2.TOPADDSUB_CARRYSELECT = 2'b10;
-	defparam i_sbmac16_2.BOTADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_2.C_REG = 1'b1;
-	defparam i_sbmac16_2.D_REG = 1'b1;
-	defparam i_sbmac16_2.MODE_8x8 = 1'b1;
+	dsp_register dsp_register_mem_wb_2 (
+			.clk(clk),
+			.inData({ex_mem_out[101:74], ex_mem_out[3:0]}),
+			.outData(mem_wb_out[31:0])
+		);
 	
 	// Later unused by yosys as outputs no longer used due to change in wb_mux
-	SB_MAC16 i_sbmac16_3 ( // port interfaces
-		.A(/*mem_regwb_mux_out[31:16]*/),
-		.B(/*mem_regwb_mux_out[15:0]*/),
-		.C({data_mem_out[31:16]}),
-		.D({data_mem_out[15:0]}),
-		.O(mem_wb_out[99:68]),
-		.CLK(clk),
-		.CE(one),
-		.IRSTTOP(zero),
-		.IRSTBOT(zero),
-		.ORSTTOP(zero),
-		.ORSTBOT(zero),
-		.AHOLD(one),
-		.BHOLD(one),
-		.CHOLD(zero),
-		.DHOLD(zero),
-		.OHOLDTOP(zero),
-		.OHOLDBOT(zero),
-		.OLOADTOP(one),
-		.OLOADBOT(one),
-		.ADDSUBTOP(zero),
-		.ADDSUBBOT(zero),
-		.CO(),
-		.CI(zero),
-		.ACCUMCI(zero),
-		.ACCUMCO(),
-		.SIGNEXTIN(zero),
-		.SIGNEXTOUT()
-	);
-	
-	defparam i_sbmac16_3.TOPADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_3.TOPADDSUB_CARRYSELECT = 2'b10;
-	defparam i_sbmac16_3.BOTADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_3.C_REG = 1'b1;
-	defparam i_sbmac16_3.D_REG = 1'b1;
-	defparam i_sbmac16_3.MODE_8x8 = 1'b1;
+	dsp_register dsp_register_mem_wb_3 (
+			.clk(clk),
+			.inData(data_mem_out),
+			.outData(mem_wb_out[99:68])
+		);
 	
 	// Later unused by yosys as outputs no longer used due to change in wb_mux
-	SB_MAC16 i_sbmac16_4 ( // port interfaces
-		.A(/*mem_regwb_mux_out[31:16]*/),
-		.B(/*mem_regwb_mux_out[15:0]*/),
-		.C({mem_csrr_mux_out[31:16]}),
-		.D({mem_csrr_mux_out[15:0]}),
-		.O({mem_wb_out[67:36]}),
-		.CLK(clk),
-		.CE(one),
-		.IRSTTOP(zero),
-		.IRSTBOT(zero),
-		.ORSTTOP(zero),
-		.ORSTBOT(zero),
-		.AHOLD(one),
-		.BHOLD(one),
-		.CHOLD(zero),
-		.DHOLD(zero),
-		.OHOLDTOP(zero),
-		.OHOLDBOT(zero),
-		.OLOADTOP(one),
-		.OLOADBOT(one),
-		.ADDSUBTOP(zero),
-		.ADDSUBBOT(zero),
-		.CO(),
-		.CI(zero),
-		.ACCUMCI(zero),
-		.ACCUMCO(),
-		.SIGNEXTIN(zero),
-		.SIGNEXTOUT()
-	);
-	
-	defparam i_sbmac16_4.TOPADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_4.TOPADDSUB_CARRYSELECT = 2'b10;
-	defparam i_sbmac16_4.BOTADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_4.C_REG = 1'b1;
-	defparam i_sbmac16_4.D_REG = 1'b1;
-	defparam i_sbmac16_4.MODE_8x8 = 1'b1;
-	
+	dsp_register dsp_register_mem_wb_4 (
+			.clk(clk),
+			.inData(mem_csrr_mux_out),
+			.outData(mem_wb_out[67:36])
+		);
 	
 	//Writeback to Register Stage
 	// No longer needed, used a register keeping result from mem_regwb_mux_out instead as it does the same thing, but 1 clock cycle earlier.
@@ -566,42 +438,11 @@ module cpu(
 		);
 	*/
 	
-	SB_MAC16 i_sbmac16_0 ( // port interfaces
-		.A(/*mem_regwb_mux_out[31:16]*/),
-		.B(/*mem_regwb_mux_out[15:0]*/),
-		.C(mem_regwb_mux_out[31:16]),
-		.D(mem_regwb_mux_out[15:0]),
-		.O(wb_mux_out),
-		.CLK(clk),
-		.CE(one),
-		.IRSTTOP(zero),
-		.IRSTBOT(zero),
-		.ORSTTOP(zero),
-		.ORSTBOT(zero),
-		.AHOLD(one),
-		.BHOLD(one),
-		.CHOLD(zero),
-		.DHOLD(zero),
-		.OHOLDTOP(zero),
-		.OHOLDBOT(zero),
-		.OLOADTOP(one),
-		.OLOADBOT(one),
-		.ADDSUBTOP(zero),
-		.ADDSUBBOT(zero),
-		.CO(),
-		.CI(zero),
-		.ACCUMCI(zero),
-		.ACCUMCO(),
-		.SIGNEXTIN(zero),
-		.SIGNEXTOUT()
-	);
-	
-	defparam i_sbmac16_0.TOPADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_0.TOPADDSUB_CARRYSELECT = 2'b10;
-	defparam i_sbmac16_0.BOTADDSUB_UPPERINPUT = 1'b1;
-	defparam i_sbmac16_0.C_REG = 1'b1;
-	defparam i_sbmac16_0.D_REG = 1'b1;
-	defparam i_sbmac16_0.MODE_8x8 = 1'b1;
+	dsp_register dsp_register_mem_wb_0 (
+			.clk(clk),
+			.inData(mem_regwb_mux_out),
+			.outData(wb_mux_out)
+		);
 	
 	mux2to1 reg_dat_mux( //TODO cleanup
 			.input0(mem_regwb_mux_out),
