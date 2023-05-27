@@ -46,24 +46,21 @@
 module if_id (clk, data_in, data_out);
 	input			clk;
 	input [63:0]		data_in;
-	output reg[63:0]	data_out;
+	output [63:0]	data_out;
+	
+	
+	dsp_register dsp_register_if_id_1 (
+			.clk(clk),
+			.inData(data_in[63:32]),
+			.outData(data_out[63:32])
+		);
+		
+	dsp_register dsp_register_if_id_2 (
+			.clk(clk),
+			.inData(data_in[31:0]),
+			.outData(data_out[31:0])
+		);
 
-	/*
-	 *	This uses Yosys's support for nonzero initial values:
-	 *
-	 *		https://github.com/YosysHQ/yosys/commit/0793f1b196df536975a044a4ce53025c81d00c7f
-	 *
-	 *	Rather than using this simulation construct (`initial`),
-	 *	the design should instead use a reset signal going to
-	 *	modules in the design.
-	 */
-	initial begin
-		data_out = 64'b0;
-	end
-
-	always @(posedge clk) begin
-		data_out <= data_in;
-	end
 endmodule
 
 
@@ -71,8 +68,21 @@ endmodule
 /* ID/EX pipeline registers */ 
 module id_ex (clk, data_in, data_out);
 	input			clk;
-	input [177:0]		data_in;
-	output reg[177:0]	data_out;
+	input [177:0]	data_in;
+	reg [113:0]	temporary;
+	output [177:0]	data_out;
+	
+	dsp_register dsp_register_id_ex_1 (
+			.clk(clk),
+			.inData(data_in[177:146]),
+			.outData(data_out[177:146])
+		);
+		
+	dsp_register dsp_register_id_ex_2 (
+			.clk(clk),
+			.inData(data_in[145:114]),
+			.outData(data_out[145:114])
+		);
 
 	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
@@ -85,12 +95,14 @@ module id_ex (clk, data_in, data_out);
 	 *	modules in the design and to thereby set the values.
 	 */
 	initial begin
-		data_out = 178'b0;
+		temporary = 114'b0;
 	end
 
 	always @(posedge clk) begin
-		data_out <= data_in;
+		temporary <= data_in[113:0];
 	end
+	
+	assign data_out[113:0] = temporary;
 endmodule
 
 
@@ -100,7 +112,7 @@ module ex_mem (clk, data_in, data_out);
 	input			clk;
 	input [154:0]		data_in;
 	output reg[154:0]	data_out;
-
+	
 	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
 	 *	initial values:
@@ -112,7 +124,7 @@ module ex_mem (clk, data_in, data_out);
 	 *	modules in the design and to thereby set the values.
 	 */
 	initial begin
-		data_out = 155'b0;
+		data_out <= 155'b0;
 	end
 
 	always @(posedge clk) begin
@@ -140,6 +152,30 @@ module mem_wb (clk, data_in, data_out);
 	 */
 	initial begin
 		data_out = 117'b0;
+	end
+
+	always @(posedge clk) begin
+		data_out <= data_in;
+	end
+endmodule
+
+module part_mem_wb (clk, data_in, data_out);
+	input			clk;
+	input [20:0]		data_in;
+	output reg[20:0]	data_out;
+
+	/*
+	 *	The `initial` statement below uses Yosys's support for nonzero
+	 *	initial values:
+	 *
+	 *		https://github.com/YosysHQ/yosys/commit/0793f1b196df536975a044a4ce53025c81d00c7f
+	 *
+	 *	Rather than using this simulation construct (`initial`),
+	 *	the design should instead use a reset signal going to
+	 *	modules in the design and to thereby set the values.
+	 */
+	initial begin
+		data_out = 21'b0;
 	end
 
 	always @(posedge clk) begin

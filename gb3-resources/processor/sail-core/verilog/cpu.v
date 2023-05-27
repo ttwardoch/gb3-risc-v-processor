@@ -399,12 +399,12 @@ module cpu(
 			.data_out(mem_wb_out)
 		);
 	*/
-	wire[10:0] trash;
 	
-	dsp_register dsp_register_mem_wb_1 (
+	// These next 4 function implement the MEM/WB Pipeline Register as 64 bits are now unused
+	part_mem_wb mem_wb_reg(
 			.clk(clk),
-			.inData({ex_mem_out[154:138], ex_mem_out[105:91]}),
-			.outData({mem_wb_out[116:100], mem_wb_out[35:32], trash[10:0]})
+			.data_in({ex_mem_out[154:138], ex_mem_out[105:102]}),
+			.data_out({mem_wb_out[116:100], mem_wb_out[35:32]})
 		);
 	
 	dsp_register dsp_register_mem_wb_2 (
