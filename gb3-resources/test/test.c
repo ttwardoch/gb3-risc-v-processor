@@ -10,8 +10,12 @@ int main(void)
 	 */
 	enum
 	{
-		kSpinDelay = 400000,
+		kSpinDelay = 800000,
 	};
+	int A = 1073741823;
+	int B = 1073741823;
+	int C = 2147483647;
+	int D = 2147483647;
 
 	volatile unsigned int *gDebugLedsMemoryMappedRegister = (unsigned int *)0x2000;
 	while (1)
@@ -23,8 +27,12 @@ int main(void)
 		 */
 		for (int j = 0; j < kSpinDelay; j++)
 			;
-
-		*gDebugLedsMemoryMappedRegister = 0x00;
+		
+		if(A + B == 2147483646 && C - D == 0){
+			// Blink only if test is passed
+			*gDebugLedsMemoryMappedRegister = 0x00;
+		}
+		
 
 		/*
 		 *	Spin

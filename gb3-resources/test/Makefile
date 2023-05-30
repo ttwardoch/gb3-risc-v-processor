@@ -6,8 +6,8 @@ GB3_ROOT = /gb3-resources
 TARGET-ARCH	= riscv32-elf
 TARGET		= riscv
 
-PROGRAM		= softwareblink
-PROGRAM-SF	= softwareblink-sf
+PROGRAM		= test
+PROGRAM-SF	= test-sf
 INIT		= init
 INIT-SF		= init-sf
 
