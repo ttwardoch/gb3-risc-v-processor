@@ -74,7 +74,7 @@ module instruction_memory(addr, out);
 		$readmemh("program.hex",instruction_memory);
 	end
 
-	
-	assign out <= instruction_memory[addr >> 2];
+
+	assign out = instruction_memory[addr >> 2];
 	
 endmodule

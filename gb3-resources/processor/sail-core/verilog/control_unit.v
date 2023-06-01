@@ -40,7 +40,6 @@
  *	RISC-V CONTROL UNIT
  */
 module control(
-		clk,
 		opcode,
 		MemtoReg,
 		RegWrite,
@@ -57,25 +56,23 @@ module control(
 	);
 
 	input	[6:0] opcode;
-	input 			clk;
 	output	MemtoReg, RegWrite, MemWrite, MemRead, Branch, ALUSrc, Jump, Jalr, Lui, Auipc, Fence, CSRR;
 
 
 
-	always @(posedge clk) begin
-		MemtoReg = (~opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[0]);
-		RegWrite = ((~(opcode[4] | opcode[5])) | opcode[2] | opcode[4]) & opcode[0];
-		MemWrite = (~opcode[6]) & (opcode[5]) & (~opcode[4]);
-		MemRead = (~opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[1]);
-		Branch = (opcode[6]) & (~opcode[4]) & (~opcode[2]);
-		ALUSrc = ~(opcode[6] | opcode[4]) | (~opcode[5]);
-		Jump = (opcode[6]) & (opcode[5]) & (~opcode[4]) & (opcode[2]);
-		Jalr = (opcode[6]) & (opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[2]);
-		Lui = (~opcode[6]) & (opcode[5]) & (opcode[4]) & (~opcode[3]) & (opcode[2]);
-		Auipc = (~opcode[6]) & (~opcode[5]) & (opcode[4]) & (~opcode[3]) & (opcode[2]);
-		Fence = (~opcode[5]) & opcode[3] & (opcode[2]);
-		CSRR = (opcode[6]) & (opcode[4]);
-	end
+
+	assign MemtoReg = (~opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[0]);
+	assign RegWrite = ((~(opcode[4] | opcode[5])) | opcode[2] | opcode[4]) & opcode[0];
+	assign MemWrite = (~opcode[6]) & (opcode[5]) & (~opcode[4]);
+	assign MemRead = (~opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[1]);
+	assign Branch = (opcode[6]) & (~opcode[4]) & (~opcode[2]);
+	assign ALUSrc = ~(opcode[6] | opcode[4]) | (~opcode[5]);
+	assign Jump = (opcode[6]) & (opcode[5]) & (~opcode[4]) & (opcode[2]);
+	assign Jalr = (opcode[6]) & (opcode[5]) & (~opcode[4]) & (~opcode[3]) & (opcode[2]);
+	assign Lui = (~opcode[6]) & (opcode[5]) & (opcode[4]) & (~opcode[3]) & (opcode[2]);
+	assign Auipc = (~opcode[6]) & (~opcode[5]) & (opcode[4]) & (~opcode[3]) & (opcode[2]);
+	assign Fence = (~opcode[5]) & opcode[3] & (opcode[2]);
+	assign CSRR = (opcode[6]) & (opcode[4]);
 
 
 

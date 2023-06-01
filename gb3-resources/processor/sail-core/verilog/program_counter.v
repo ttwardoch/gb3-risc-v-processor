@@ -64,7 +64,7 @@ module program_counter(inAddr, outAddr, clk);
 
 	
 	always @(posedge clk) begin
-		outAddr <= adder;
+		outAddr <= inAddr;
 	end
 	
 endmodule

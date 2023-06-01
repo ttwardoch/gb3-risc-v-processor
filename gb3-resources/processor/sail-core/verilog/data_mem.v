@@ -228,7 +228,20 @@ module data_mem (clk, addr, write_data, memwrite, memread, sign_mask, read_data,
 	/*
 	 *	LED register interfacing with I/O
 	 */
+
+	reg internal_clk;
+	reg gated_clk;
+
 	always @(posedge clk) begin
+        if (memwrite == 1'b1 && addr == 32'h2000)
+            internal_clk <= 1'b1;  
+        else
+            internal_clk <= 1'b0;  
+    end
+
+	assign gated_clk = clk & internal_clk;
+
+	always @(posedge gated_clk) begin
 		if(memwrite == 1'b1 && addr == 32'h2000) begin
 			led_reg <= write_data;
 		end
@@ -292,3 +305,4 @@ module data_mem (clk, addr, write_data, memwrite, memread, sign_mask, read_data,
 	 */
 	assign led = led_reg[7:0];
 endmodule
+
