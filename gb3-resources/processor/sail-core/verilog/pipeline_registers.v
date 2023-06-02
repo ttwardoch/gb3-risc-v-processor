@@ -122,6 +122,7 @@ module ex_mem (clk, data_in, data_out);
 	input [154:0]		data_in;
 	output reg [154:0]	data_out;
 	
+	
 	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
 	 *	initial values:
@@ -133,12 +134,13 @@ module ex_mem (clk, data_in, data_out);
 	 *	modules in the design and to thereby set the values.
 	 */
 	initial begin
-		data_out <= 155'b0;
+		data_out = 155'b0;
 	end
 
 	always @(posedge clk) begin
 		data_out <= data_in;
 	end
+
 endmodule
 
 
