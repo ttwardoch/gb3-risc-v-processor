@@ -120,20 +120,8 @@ endmodule
 module ex_mem (clk, data_in, data_out);
 	input			clk;
 	input [154:0]		data_in;
-	reg [90:0] temporary;
-	output [154:0]	data_out;
+	output reg [154:0]	data_out;
 	
-	dsp_register dsp_register_ex_mem_1 (
-			.clk(clk),
-			.inData(data_in[154:123]),
-			.outData(data_out[154:123])
-		);
-		
-	dsp_register dsp_register_ex_mem_2 (
-			.clk(clk),
-			.inData(data_in[122:91]),
-			.outData(data_out[122:91])
-		);
 	
 	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
@@ -146,14 +134,13 @@ module ex_mem (clk, data_in, data_out);
 	 *	modules in the design and to thereby set the values.
 	 */
 	initial begin
-		temporary = 91'b0;
+		data_out = 155'b0;
 	end
 
 	always @(posedge clk) begin
-		temporary <= data_in[90:0];
+		data_out <= data_in;
 	end
-	
-	assign data_out[90:0] = temporary;
+
 endmodule
 
 

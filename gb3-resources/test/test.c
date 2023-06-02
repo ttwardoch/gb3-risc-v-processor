@@ -12,7 +12,10 @@ int main(void)
 	{
 		kSpinDelay = 400000,
 	};
-
+	
+	int A =1234;
+	int B =1234;
+	
 	volatile unsigned int *gDebugLedsMemoryMappedRegister = (unsigned int *)0x2000;
 	while (1)
 	{
@@ -23,9 +26,9 @@ int main(void)
 		 */
 		for (int j = 0; j < kSpinDelay; j++)
 			;
-
-		*gDebugLedsMemoryMappedRegister = 0x00;
-
+		if(A+B==2468 && A-B == 0){
+			*gDebugLedsMemoryMappedRegister = 0x00;
+		}
 		/*
 		 *	Spin
 		 */
