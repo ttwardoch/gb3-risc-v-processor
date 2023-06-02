@@ -2,10 +2,20 @@
 	softwareblink \
 	hardwareblink \
 	bubblesort \
+	benchmark \
+	test \
 	clean
 
 softwareblink:
 	cd softwareblink; make clean; make; make install
+	cd processor; make
+	
+benchmark:
+	cd benchmark; make clean; make; make install
+	cd processor; make
+	
+test:
+	cd test; make clean; make; make install
 	cd processor; make
 
 hardwareblink:

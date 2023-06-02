@@ -392,20 +392,58 @@ module cpu(
 		);
 
 	//MEM/WB Pipeline Register
+	/*
 	mem_wb mem_wb_reg(
 			.clk(clk),
 			.data_in({ex_mem_out[154:143], ex_mem_out[142:138], data_mem_out, mem_csrr_mux_out, ex_mem_out[105:74], ex_mem_out[3:0]}),
 			.data_out(mem_wb_out)
 		);
-
+	*/
+	
+	// These next 4 function implement the MEM/WB Pipeline Register as 64 bits are now unused
+	part_mem_wb mem_wb_reg(
+			.clk(clk),
+			.data_in({ex_mem_out[154:138], ex_mem_out[105:102]}),
+			.data_out({mem_wb_out[116:100], mem_wb_out[35:32]})
+		);
+	
+	dsp_register dsp_register_mem_wb_2 (
+			.clk(clk),
+			.inData({ex_mem_out[101:74], ex_mem_out[3:0]}),
+			.outData(mem_wb_out[31:0])
+		);
+	
+	// Later unused by yosys as outputs no longer used due to change in wb_mux
+	dsp_register dsp_register_mem_wb_3 (
+			.clk(clk),
+			.inData(data_mem_out),
+			.outData(mem_wb_out[99:68])
+		);
+	
+	// Later unused by yosys as outputs no longer used due to change in wb_mux
+	dsp_register dsp_register_mem_wb_4 (
+			.clk(clk),
+			.inData(mem_csrr_mux_out),
+			.outData(mem_wb_out[67:36])
+		);
+	
 	//Writeback to Register Stage
+	// No longer needed, used a register keeping result from mem_regwb_mux_out instead as it does the same thing, but 1 clock cycle earlier.
+	/*
 	mux2to1 wb_mux(
 			.input0(mem_wb_out[67:36]),
 			.input1(mem_wb_out[99:68]),
 			.select(mem_wb_out[1]),
 			.out(wb_mux_out)
 		);
-
+	*/
+	
+	dsp_register dsp_register_mem_wb_0 (
+			.clk(clk),
+			.inData(mem_regwb_mux_out),
+			.outData(wb_mux_out)
+		);
+	
 	mux2to1 reg_dat_mux( //TODO cleanup
 			.input0(mem_regwb_mux_out),
 			.input1(id_ex_out[43:12]),
@@ -493,8 +531,7 @@ module cpu(
 			.out(pc_mux0)
 		);
 
-	wire[31:0] mem_regwb_mux_out; //TODO copy of wb_mux but in mem stage, move back and cleanup
-	//A copy of the writeback mux, but in MEM stage //TODO move back and cleanup
+	wire[31:0] mem_regwb_mux_out;
 	mux2to1 mem_regwb_mux(
 			.input0(mem_csrr_mux_out),
 			.input1(data_mem_out),
