@@ -41,7 +41,7 @@
  */
 
 module branch_predictor(
-		clk,
+		gated_clk,
 		actual_branch_decision,
 		branch_decode_sig,
 		branch_mem_sig,
@@ -54,7 +54,7 @@ module branch_predictor(
 	/*
 	 *	inputs
 	 */
-	input		clk;
+	input		gated_clk;
 	input		actual_branch_decision;
 	input		branch_decode_sig;
 	input		branch_mem_sig;
@@ -72,7 +72,6 @@ module branch_predictor(
 	 */
 	reg [1:0]	s;
 
-	reg		branch_mem_sig_reg;
 
 	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
@@ -86,23 +85,17 @@ module branch_predictor(
 	 */
 	initial begin
 		s = 2'b00;
-		branch_mem_sig_reg = 1'b0;
 	end
 
-	always @(negedge clk) begin
-		branch_mem_sig_reg <= branch_mem_sig;
-	end
 
 	/*
 	 *	Using this microarchitecture, branches can't occur consecutively
 	 *	therefore can use branch_mem_sig as every branch is followed by
 	 *	a bubble, so a 0 to 1 transition
 	 */
-	always @(posedge clk) begin
-		if (branch_mem_sig_reg) begin
-			s[1] <= (s[1]&s[0]) | (s[0]&actual_branch_decision) | (s[1]&actual_branch_decision);
-			s[0] <= (s[1]&(!s[0])) | ((!s[0])&actual_branch_decision) | (s[1]&actual_branch_decision);
-		end
+	always @(posedge gated_clk) begin
+		s[1] <= (s[1]&s[0]) | (s[0]&actual_branch_decision) | (s[1]&actual_branch_decision);
+		s[0] <= (s[1]&(!s[0])) | ((!s[0])&actual_branch_decision) | (s[1]&actual_branch_decision);
 	end
 
 	assign branch_addr = in_addr + offset;

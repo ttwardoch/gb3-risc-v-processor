@@ -108,7 +108,7 @@ module id_ex (clk, data_in, data_out);
 	initial begin
 		data_out <= 178'b0;
 	end
-
+	
 	always @(posedge clk) begin
 		data_out <= data_in;
 	end
@@ -186,6 +186,8 @@ module part_mem_wb (clk, data_in, data_out);
 	initial begin
 		data_out = 21'b0;
 	end
+
+
 
 	always @(posedge clk) begin
 		data_out <= data_in;
