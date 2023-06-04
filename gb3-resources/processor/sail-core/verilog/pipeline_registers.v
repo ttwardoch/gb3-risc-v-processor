@@ -46,9 +46,9 @@
 module if_id (clk, data_in, data_out);
 	input			clk;
 	input [63:0]		data_in;
-	output [63:0]	data_out;
+	output reg [63:0]	data_out;
 	
-	
+	/*
 	dsp_register dsp_register_if_id_1 (
 			.clk(clk),
 			.inData(data_in[63:32]),
@@ -60,6 +60,15 @@ module if_id (clk, data_in, data_out);
 			.inData(data_in[31:0]),
 			.outData(data_out[31:0])
 		);
+	*/
+	
+	initial begin
+		data_out <= 64'b0;
+	end
+	
+	always @(posedge clk) begin
+		data_out <= data_in;
+	end
 
 endmodule
 
