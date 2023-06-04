@@ -83,9 +83,5 @@ module instruction_memory(addr, out, clk);
 	end
 
 	assign out = instruction_memory[addr >> 2];
-<<<<<<< Updated upstream
-=======
 	*/
-	
->>>>>>> Stashed changes
 endmodule

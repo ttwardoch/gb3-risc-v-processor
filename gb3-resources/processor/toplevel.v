@@ -88,12 +88,9 @@ module top (led);
 
 	instruction_memory inst_mem( 
 		.addr(inst_in), 
-<<<<<<< Updated upstream
 		.out(inst_out)
-=======
-		.out(inst_out),
 		.clk(clk)
->>>>>>> Stashed changes
+
 	);
 	
 	data_mem data_mem_inst(
