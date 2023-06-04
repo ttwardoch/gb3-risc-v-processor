@@ -57,6 +57,7 @@ module cpu(
 	 *	Input Clock
 	 */
 	input clk;
+	wire 		gated_clk;
 
 	/*
 	 *	instruction memory input
@@ -175,6 +176,13 @@ module cpu(
 	/*
 	 *	Instruction Fetch Stage
 	 */
+
+	clockgating cg_branchpredictor(
+			.clk(clk),
+			.enable(ex_mem_out[6]),
+			.gated_clk(gated_clk)
+		);
+
 	mux2to1 pc_mux(
 			.input0(pc_mux0),
 			.input1(ex_mem_out[72:41]),
@@ -507,7 +515,7 @@ module cpu(
 
 	//Branch Predictor
 	branch_predictor branch_predictor_FSM(
-			.clk(clk),
+			.gated_clk(gated_clk),
 			.actual_branch_decision(actual_branch_decision),
 			.branch_decode_sig(cont_mux_out[6]),
 			.branch_mem_sig(ex_mem_out[6]),
@@ -552,4 +560,33 @@ module cpu(
 	assign data_mem_memwrite = ex_cont_mux_out[4];
 	assign data_mem_memread = ex_cont_mux_out[5];
 	assign data_mem_sign_mask = id_ex_out[150:147];
+endmodule
+
+module clockgating(clk, enable, gated_clk);
+    input clk;
+    input enable;
+    output reg gated_clk;
+
+    reg internal_clk;
+    reg enable1;
+
+    initial begin
+        internal_clk = 1'b0;
+		enable1 = 1'b0;
+        gated_clk = 1'b0;
+	end
+
+    always @(negedge clk) begin
+        enable1 <= enable;
+    end
+
+    always @(posedge clk) begin
+        if (enable1)
+            internal_clk <= 1'b1;  
+        else
+            internal_clk <= 1'b0;  
+    end
+
+    assign gated_clk = clk & internal_clk;  
+
 endmodule
