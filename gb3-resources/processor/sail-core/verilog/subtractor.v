@@ -37,44 +37,60 @@
 
 
 /*
- *	RISC-V instruction memory
+ *	Description:
+ *
+ *		This module implements an adder for use by the branch unit
+ *		and program counter increment among other things.
  */
 
 
 
-module instruction_memory(addr, out);
-	input [31:0]		addr;
-	output [31:0]		out;
-
-	/*
-	 *	Size the instruction memory.
-	 *
-	 *	(Bad practice: The constant should be a `define).
-	 */
-	reg [31:0]		instruction_memory[0:2**12-1];
-
-	/*
-	 *	According to the "iCE40 SPRAM Usage Guide" (TN1314 Version 1.0), page 5:
-	 *
-	 *		"SB_SPRAM256KA RAM does not support initialization through device configuration."
-	 *
-	 *	The only way to have an initializable memory is to use the Block RAM.
-	 *	This uses Yosys's support for nonzero initial values:
-	 *
-	 *		https://github.com/YosysHQ/yosys/commit/0793f1b196df536975a044a4ce53025c81d00c7f
-	 *
-	 *	Rather than using this simulation construct (`initial`),
-	 *	the design should instead use a reset signal going to
-	 *	modules in the design.
-	 */
-	initial begin
-		/*
-		 *	read from "program.hex" and store the instructions in instruction memory
-		 */
-		$readmemh("program.hex",instruction_memory);
-	end
 
 
-	assign out = instruction_memory[addr >> 2];
+module subtractor(input1, input2, out);
+	input [31:0]	input1;
+	input [31:0]	input2;
+	reg zero = 1'b0;
+	reg one = 1'b1;
+	output [31:0]	out;
 	
+	SB_MAC16 i_sbmac16 ( // port interfaces
+		.A(input1[31:16]),
+		.B(input1[15:0]),
+		.C(input2[31:16]),
+		.D(input2[15:0]),
+		.O(out),
+		.CLK(zero),
+		.CE(zero),
+		.IRSTTOP(zero),
+		.IRSTBOT(zero),
+		.ORSTTOP(zero),
+		.ORSTBOT(zero),
+		.AHOLD(zero),
+		.BHOLD(zero),
+		.CHOLD(zero),
+		.DHOLD(zero),
+		.OHOLDTOP(zero),
+		.OHOLDBOT(zero),
+		.OLOADTOP(zero),
+		.OLOADBOT(zero),
+		.ADDSUBTOP(one),
+		.ADDSUBBOT(one),
+		.CO(),
+		.CI(zero),
+		.ACCUMCI(),
+		.ACCUMCO(),
+		.SIGNEXTIN(),
+		.SIGNEXTOUT()
+	);
+	
+	
+	defparam i_sbmac16.TOPADDSUB_UPPERINPUT = 1'b1;
+	defparam i_sbmac16.TOPADDSUB_CARRYSELECT = 2'b10;
+	defparam i_sbmac16.BOTADDSUB_UPPERINPUT = 1'b1;
+	//defparam i_sbmac16.A_SIGNED = 1'b1;
+	//defparam i_sbmac16.B_SIGNED = 1'b1;
+	defparam i_sbmac16.MODE_8x8 = 1'b1;
+	
+	//assign		out = input1 + input2;
 endmodule

@@ -118,7 +118,7 @@
 // MY OWN ATTEMPT:
 
 module branch_predictor(
-		clk,
+		gated_clk,
 		actual_branch_decision,
 		branch_decode_sig,
 		branch_mem_sig,
@@ -131,7 +131,7 @@ module branch_predictor(
 	/*
 	 *	inputs
 	 */
-	input		clk;
+	input		gated_clk;
 	input		actual_branch_decision;
 	input		branch_decode_sig;   // 1 if the instruction is a branch instruction
 	input		branch_mem_sig; // ex_mem_out[6] on schematic; 1 if
@@ -150,6 +150,7 @@ module branch_predictor(
 	reg [1:0]	s [15:0];
 
 	integer i;
+
 
 	reg		branch_mem_sig_reg;
 	reg 	actual_branch_decision_reg;
@@ -173,24 +174,27 @@ module branch_predictor(
 		actual_branch_decision_reg = 1'b0;
 	end
 
-	always @(negedge clk) begin
+  always @(negedge gated_clk) begin
 		branch_mem_sig_reg <= branch_mem_sig;
 		actual_branch_decision_reg <= actual_branch_decision;
 	end
+
 
 	/*
 	 *	Using this microarchitecture, branches can't occur consecutively
 	 *	therefore can use branch_mem_sig as every branch is followed by
 	 *	a bubble, so a 0 to 1 transition
 	 */
+
 	
 
-	always @(posedge clk) begin
-			if (branch_mem_sig_reg) begin
+  always @(posedge gated_clk) begin
+			//if (branch_mem_sig_reg) begin
 				index = in_addr[3:0];
 				s[index][1] <= (s[index][1]&s[index][0]) | (s[index][0]&actual_branch_decision_reg) | (s[index][1]&actual_branch_decision_reg);
 				s[index][0] <= (s[index][1]&(!s[index][0])) | ((!s[index][0])&actual_branch_decision_reg) | (s[index][1]&actual_branch_decision_reg);		
-			end	
+			//end	
+
 	end
 	assign branch_addr = in_addr + offset;
 	assign prediction = s[1] & branch_decode_sig;

@@ -1,4 +1,4 @@
-/*
+/**
 	Authored 2018-2019, Ryan Voo.
 
 	All rights reserved.
@@ -49,17 +49,21 @@ module top (led);
 	
 	wire		clk;
 	reg		ENCLKHF		= 1'b1;	// Plock enable
-	reg		CLKHF_POWERUP	= 1'b1;	// Power up the HFOSC circuit
+	reg		CLKHF_POWERUP	= 1'b1;	
 
 
 	/*
 	 *	Use the iCE40's hard primitive for the clock source.
 	 */
-	SB_HFOSC #(.CLKHF_DIV("0b11")) OSCInst0 (
+	SB_HFOSC #(.CLKHF_DIV("0b10")) OSCInst0 (
 		.CLKHFEN(ENCLKHF),
 		.CLKHFPU(CLKHF_POWERUP),
 		.CLKHF(clk)
 	);
+
+
+
+
 
 	/*
 	 *	Memory interface
@@ -72,7 +76,6 @@ module top (led);
 	wire		data_memwrite;
 	wire		data_memread;
 	wire[3:0]	data_sign_mask;
-
 
 	cpu processor(
 		.clk(clk_proc),
@@ -88,7 +91,7 @@ module top (led);
 
 	instruction_memory inst_mem( 
 		.addr(inst_in), 
-		.out(inst_out)
+		.out(inst_out),
 	);
 
 	data_mem data_mem_inst(
