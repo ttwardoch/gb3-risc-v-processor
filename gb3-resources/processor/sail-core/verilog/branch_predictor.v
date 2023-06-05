@@ -40,6 +40,83 @@
  *		Branch Predictor FSM
  */
 
+// ORIGINAL:
+
+// module branch_predictor(
+// 		clk,
+// 		actual_branch_decision,
+// 		branch_decode_sig,
+// 		branch_mem_sig,
+// 		in_addr,
+// 		offset,
+// 		branch_addr,
+// 		prediction
+// 	);
+
+// 	/*
+// 	 *	inputs
+// 	 */
+// 	input		clk;
+// 	input		actual_branch_decision;
+// 	input		branch_decode_sig;
+// 	input		branch_mem_sig;
+// 	input [31:0]	in_addr;
+// 	input [31:0]	offset;
+
+// 	/*
+// 	 *	outputs
+// 	 */
+// 	output [31:0]	branch_addr;
+// 	output		prediction;
+
+// 	/*
+// 	 *	internal state
+// 	 */
+// 	reg [1:0]	s;
+
+// 	reg		branch_mem_sig_reg;
+
+// 	/*
+// 	 *	The `initial` statement below uses Yosys's support for nonzero
+// 	 *	initial values:
+// 	 *
+// 	 *		https://github.com/YosysHQ/yosys/commit/0793f1b196df536975a044a4ce53025c81d00c7f
+// 	 *
+// 	 *	Rather than using this simulation construct (`initial`),
+// 	 *	the design should instead use a reset signal going to
+// 	 *	modules in the design and to thereby set the values.
+// 	 */
+
+// 	initial begin
+// 		s = 2'b00;
+// 		branch_mem_sig_reg = 1'b0;
+// 	end
+
+// 	always @(negedge clk) begin
+// 		branch_mem_sig_reg <= branch_mem_sig;
+// 	end
+
+// 	/*
+// 	 *	Using this microarchitecture, branches can't occur consecutively
+// 	 *	therefore can use branch_mem_sig as every branch is followed by
+// 	 *	a bubble, so a 0 to 1 transition
+// 	 */
+	
+// 	always @(posedge clk) begin
+// 		if (branch_mem_sig_reg) begin
+// 			s[1] <= (s[1]&s[0]) | (s[0]&actual_branch_decision) | (s[1]&actual_branch_decision);
+// 			s[0] <= (s[1]&(!s[0])) | ((!s[0])&actual_branch_decision) | (s[1]&actual_branch_decision);
+// 		end
+// 	end
+
+// 	assign branch_addr = in_addr + offset;
+// 	assign prediction = s[1] & branch_decode_sig;
+// endmodule
+
+
+
+// MY OWN ATTEMPT:
+
 module branch_predictor(
 		clk,
 		actual_branch_decision,
@@ -56,10 +133,10 @@ module branch_predictor(
 	 */
 	input		clk;
 	input		actual_branch_decision;
-	input		branch_decode_sig;
-	input		branch_mem_sig;
-	input [31:0]	in_addr;
-	input [31:0]	offset;
+	input		branch_decode_sig;   // 1 if the instruction is a branch instruction
+	input		branch_mem_sig; // ex_mem_out[6] on schematic; 1 if
+	input [31:0]	in_addr;  
+	input [31:0]	offset;  
 
 	/*
 	 *	outputs
@@ -70,9 +147,13 @@ module branch_predictor(
 	/*
 	 *	internal state
 	 */
-	reg [1:0]	s;
+	reg [1:0]	s [15:0];
+
+	integer i;
 
 	reg		branch_mem_sig_reg;
+	reg 	actual_branch_decision_reg;
+	reg [3:0]	index;
 
 	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
@@ -84,13 +165,17 @@ module branch_predictor(
 	 *	the design should instead use a reset signal going to
 	 *	modules in the design and to thereby set the values.
 	 */
+
 	initial begin
-		s = 2'b00;
+		for (i=0; i<16; i=i+1)
+			s[i] = 2'b00;
 		branch_mem_sig_reg = 1'b0;
+		actual_branch_decision_reg = 1'b0;
 	end
 
 	always @(negedge clk) begin
 		branch_mem_sig_reg <= branch_mem_sig;
+		actual_branch_decision_reg <= actual_branch_decision;
 	end
 
 	/*
@@ -98,13 +183,102 @@ module branch_predictor(
 	 *	therefore can use branch_mem_sig as every branch is followed by
 	 *	a bubble, so a 0 to 1 transition
 	 */
-	always @(posedge clk) begin
-		if (branch_mem_sig_reg) begin
-			s[1] <= (s[1]&s[0]) | (s[0]&actual_branch_decision) | (s[1]&actual_branch_decision);
-			s[0] <= (s[1]&(!s[0])) | ((!s[0])&actual_branch_decision) | (s[1]&actual_branch_decision);
-		end
-	end
+	
 
+	always @(posedge clk) begin
+			if (branch_mem_sig_reg) begin
+				index = in_addr[3:0];
+				s[index][1] <= (s[index][1]&s[index][0]) | (s[index][0]&actual_branch_decision_reg) | (s[index][1]&actual_branch_decision_reg);
+				s[index][0] <= (s[index][1]&(!s[index][0])) | ((!s[index][0])&actual_branch_decision_reg) | (s[index][1]&actual_branch_decision_reg);		
+			end	
+	end
 	assign branch_addr = in_addr + offset;
 	assign prediction = s[1] & branch_decode_sig;
 endmodule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// CHATGPT:
+
+
+// module branch_predictor(
+//     input clk,
+//     input actual_branch_decision,
+//     input branch_decode_sig,
+//     input branch_mem_sig,
+//     input [31:0] in_addr,
+//     input [31:0] offset,
+//     output reg [31:0] branch_addr,
+//     output reg prediction
+// );
+
+//     // PHT size parameter
+//     parameter PHT_SIZE = 4;
+
+//     // Global History Register (GHR)
+//     reg [1:0] GHR = 2'b00;
+
+//     // Pattern History Table (PHT) with 2-bit saturating counters
+//     reg [1:0] PHT [0:PHT_SIZE-1];
+
+//     // GHR shift and update
+//     always @(posedge clk)
+//     begin
+//         if(branch_mem_sig)
+//             GHR <= {GHR[0], actual_branch_decision};
+//     end
+
+//     // Update PHT based on branch outcome
+//     always @(posedge clk)
+//     begin
+//         if(branch_mem_sig)
+//         begin
+//             if(actual_branch_decision)
+//             begin
+//                 if(PHT[in_addr[PHT_SIZE-1:0]] < 2'b11)
+//                     PHT[in_addr[PHT_SIZE-1:0]] <= PHT[in_addr[PHT_SIZE-1:0]] + 1'b1;
+//             end
+//             else
+//             begin
+//                 if(PHT[in_addr[PHT_SIZE-1:0]] > 2'b00)
+//                     PHT[in_addr[PHT_SIZE-1:0]] <= PHT[in_addr[PHT_SIZE-1:0]] - 1'b1;
+//             end
+//         end
+//     end
+
+//     // Assign branch address and prediction
+//     assign branch_addr = in_addr + offset;
+//     assign prediction = PHT[GHR[1:0]][1] & branch_decode_sig;
+
+// endmodule
