@@ -195,13 +195,14 @@ module cpu(
 			.input2(pc_out),
 			.out(pc_adder_out)
 		);
-
+	
 	program_counter PC(
 			.inAddr(pc_in),
 			.outAddr(pc_out),
 			.clk(clk)
 		);
-
+	
+	
 	mux2to1 inst_mux(
 			.input0(inst_mem_out),
 			.input1(32'b0),
@@ -552,7 +553,7 @@ module cpu(
 	assign inst_mux_sel = pcsrc | predict | mistake_trigger | Fence_signal;
 
 	//Instruction Memory Connections
-	assign inst_mem_in = pc_out;
+	assign inst_mem_in = pc_in;
 
 	//Data Memory Connections
 	assign data_mem_addr = lui_result;

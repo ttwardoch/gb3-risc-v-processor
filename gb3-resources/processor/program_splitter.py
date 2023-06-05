@@ -12,12 +12,11 @@ lines_2 = [line[4:6] + "\n" for line in lines]
 lines_3 = [line[2:4] + "\n" for line in lines]
 lines_4 = [line[0:2] + "\n" for line in lines]
 
-print(lines[1][6:8])
 
-out_file_1.writelines(lines_1)
-out_file_2.writelines(lines_2)
-out_file_3.writelines(lines_3)
-out_file_4.writelines(lines_4)
+out_file_1.writelines(lines_1[:512])
+out_file_2.writelines(lines_2[:512])
+out_file_3.writelines(lines_3[:512])
+out_file_4.writelines(lines_4[:512])
 
 
 out_file_1.close()
