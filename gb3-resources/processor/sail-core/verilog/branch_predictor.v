@@ -118,7 +118,7 @@
 // MY OWN ATTEMPT:
 
 module branch_predictor(
-		gated_clk,
+		clk,
 		actual_branch_decision,
 		branch_decode_sig,
 		branch_mem_sig,
@@ -131,7 +131,7 @@ module branch_predictor(
 	/*
 	 *	inputs
 	 */
-	input		gated_clk;
+	input		clk;
 	input		actual_branch_decision;
 	input		branch_decode_sig;   // 1 if the instruction is a branch instruction
 	input		branch_mem_sig; // ex_mem_out[6] on schematic; 1 if
@@ -174,7 +174,7 @@ module branch_predictor(
 		actual_branch_decision_reg = 1'b0;
 	end
 
-  always @(negedge gated_clk) begin
+  always @(negedge clk) begin
 		branch_mem_sig_reg <= branch_mem_sig;
 		actual_branch_decision_reg <= actual_branch_decision;
 	end
@@ -188,12 +188,12 @@ module branch_predictor(
 
 	
 
-  always @(posedge gated_clk) begin
-			//if (branch_mem_sig_reg) begin
+  always @(posedge clk) begin
+			if (branch_mem_sig_reg) begin
 				index = in_addr[3:0];
 				s[index][1] <= (s[index][1]&s[index][0]) | (s[index][0]&actual_branch_decision_reg) | (s[index][1]&actual_branch_decision_reg);
 				s[index][0] <= (s[index][1]&(!s[index][0])) | ((!s[index][0])&actual_branch_decision_reg) | (s[index][1]&actual_branch_decision_reg);		
-			//end	
+			end	
 
 	end
 	assign branch_addr = in_addr + offset;

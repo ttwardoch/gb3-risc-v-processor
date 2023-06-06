@@ -515,7 +515,7 @@ module cpu(
 
 	//Branch Predictor
 	branch_predictor branch_predictor_FSM(
-			.gated_clk(gated_clk),
+			.clk(clk),
 			.actual_branch_decision(actual_branch_decision),
 			.branch_decode_sig(cont_mux_out[6]),
 			.branch_mem_sig(ex_mem_out[6]),
